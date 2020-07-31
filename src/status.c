@@ -18,5 +18,5 @@ void status_sendUpdate(void) {
             out |= 1 << (8-x);
         }
     }
-    LATE = (LATE & 0xFD) | out; //Buzzer is on bit 2, don't change that pin
+    LATE = (LATE & 0xFD) | out; //Buzzer is on bit 1, don't change that pin
 }
