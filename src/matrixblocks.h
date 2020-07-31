@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #endif
 
-
+#include "config.h"
 #include "interrupts.h"
 #include "rgb.h"
 #include "status.h"
