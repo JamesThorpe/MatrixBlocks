@@ -14,12 +14,12 @@ away from MPLAB X, without a ton of warnings.
 #define true 1
 #define __interrupt()  
 
-struct vsc_INTCON0bits {
+struct vsc_INTCONbits {
     uint8_t GIE;
     uint8_t IPEN;
 };
 
-struct vsc_INTCON0bits INTCON0bits;
+struct vsc_INTCONbits INTCONbits;
 
 
 struct vsc_LATGbits {

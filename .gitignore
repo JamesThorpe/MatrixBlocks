@@ -4,3 +4,5 @@
 /src/nbproject/private/
 /src/nbproject/Makefile-*
 /src/nbproject/Package-*
+/src/build/
+/src/dist/

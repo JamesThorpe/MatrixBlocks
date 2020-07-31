@@ -4,8 +4,11 @@
 #ifdef _vscode
 #include "helpers/vscode.h"
 #else
-#include <xc8.h>
+#include <xc.h>
+#include <stdint.h>
+#include <stdbool.h>
 #endif
+
 
 #include "interrupts.h"
 #include "rgb.h"

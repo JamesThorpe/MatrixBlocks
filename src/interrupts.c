@@ -1,7 +1,7 @@
 #include "interrupts.h"
 
 void interrupts_init(void) {
-    INTCON0bits.IPEN = 0;
+    INTCONbits.IPEN = 0;
 }
 
 
