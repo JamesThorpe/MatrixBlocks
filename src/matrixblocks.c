@@ -11,6 +11,9 @@ void main(void) {
     interrupts_init();
     interrupts_enableGlobalInterrupts();
 
+    status_pwr_led->on = 1;
+    status_sendUpdate();
+    
     while(true) {
         if (millisecondPassed) {
             millisecond();
