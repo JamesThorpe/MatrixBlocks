@@ -17,7 +17,6 @@ void updateAnimations(void);
 #define delay900() delay600() delay300()
     
 //Gamma correction lookup table from https://learn.adafruit.com/led-tricks-gamma-correction/the-quick-fix
-//TODO: verify this goes in program memory by just using const
 const uint8_t gamma8[] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,
