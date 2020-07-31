@@ -1,3 +1,6 @@
 /tools/MCCProject.X/nbproject/Makefile-*
 /tools/MCCProject.X/nbproject/Package-*
 /tools/MCCProject.X/nbproject/private/
+/src/nbproject/private/
+/src/nbproject/Makefile-*
+/src/nbproject/Package-*
