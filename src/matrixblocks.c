@@ -7,6 +7,7 @@ bool millisecondPassed = false;
 void main(void) {
     config_init();
     rgb_init();
+    status_init();
     interrupts_init();
     interrupts_enableGlobalInterrupts();
 

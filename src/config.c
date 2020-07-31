@@ -61,9 +61,11 @@
 
 void config_initialiseOscillator(void);
 void config_initialisePMD(void);
+void config_initialisePins(void);
 
 void config_init(void) {
     config_initialisePMD();
+    config_initialisePins();
     config_initialiseOscillator();
 }
 
@@ -95,4 +97,92 @@ void config_initialisePMD(void)
     PMD4 = 0x00;
     // UART5MD EUSART5 enabled; UART4MD EUSART4 enabled; UART3MD EUSART3 enabled; UART2MD EUSART2 enabled; MSSP1MD MSSP1 enabled; UART1MD EUSART1 enabled; 
     PMD5 = 0x00;
+}
+
+
+
+void config_initialisePins(void)
+{
+    /**
+    LATx registers
+    */
+    LATE = 0x00;
+    LATD = 0x00;
+    LATA = 0x00;
+    LATF = 0x00;
+    LATB = 0x00;
+    LATG = 0x00;
+    LATC = 0x00;
+    LATH = 0x00;
+
+    /**
+    TRISx registers
+    */
+    TRISE = 0xFF;
+    TRISF = 0xFF;
+    TRISA = 0xFF;
+    TRISG = 0xDF;
+    TRISB = 0xFF;
+    TRISH = 0x0F;
+    TRISC = 0xFF;
+    TRISD = 0xFF;
+
+    /**
+    ANSELx registers
+    */
+    ANSELD = 0xFF;
+    ANSELB = 0xFF;
+    ANSELE = 0xFF;
+    ANSELG = 0xFF;
+    ANSELF = 0xFF;
+    ANSELA = 0xFF;
+
+    /**
+    WPUx registers
+    */
+    WPUD = 0x00;
+    WPUF = 0x00;
+    WPUE = 0x00;
+    WPUB = 0x00;
+    WPUG = 0x00;
+    WPUA = 0x00;
+    WPUC = 0x00;
+    WPUH = 0x00;
+
+    /**
+    ODx registers
+    */
+    ODCONE = 0x00;
+    ODCONF = 0x00;
+    ODCONA = 0x00;
+    ODCONG = 0x00;
+    ODCONB = 0x00;
+    ODCONH = 0x00;
+    ODCONC = 0x00;
+    ODCOND = 0x00;
+
+    /**
+    SLRCONx registers
+    */
+    SLRCONA = 0xFF;
+    SLRCONB = 0xFF;
+    SLRCONC = 0xFF;
+    SLRCOND = 0xFF;
+    SLRCONE = 0xFF;
+    SLRCONF = 0xFF;
+    SLRCONG = 0xFF;
+    SLRCONH = 0xFF;
+
+    /**
+    INLVLx registers
+    */
+    INLVLA = 0xFF;
+    INLVLB = 0xFF;
+    INLVLC = 0xFF;
+    INLVLD = 0xFF;
+    INLVLE = 0xFF;
+    INLVLF = 0xFF;
+    INLVLG = 0xFF;
+    INLVLH = 0xFF;
+    
 }
