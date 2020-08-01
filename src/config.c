@@ -118,7 +118,7 @@ void config_initialisePins(void)
     /**
     TRISx registers
     */
-    TRISE = 0xFF;
+    TRISE = 0x02; //0 = Power LED, 2-7 = Status LEDs
     TRISF = 0xFF;
     TRISA = 0xFF;
     TRISG = 0xDF;
@@ -132,7 +132,7 @@ void config_initialisePins(void)
     */
     ANSELD = 0xFF;
     ANSELB = 0xFF;
-    ANSELE = 0xFF;
+    ANSELE = 0x02; //0 = Power LED, 2-7 = Status LEDs, no Analog
     ANSELG = 0xFF;
     ANSELF = 0xFF;
     ANSELA = 0xFF;
