@@ -8,7 +8,7 @@ typedef struct status_led {
 } status_led;
 
 status_led status_leds[7];
-status_led* status_pwr_led;
+status_led* status_pwr_led = &status_leds[0];
 
 
 void status_init(void);

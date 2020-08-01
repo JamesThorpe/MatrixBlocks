@@ -4,7 +4,7 @@
 
 
 void status_init(void) {
-    status_pwr_led = &status_leds[0];
+    
 }
 
 
@@ -18,5 +18,8 @@ void status_sendUpdate(void) {
             out |= 1 << (8-x);
         }
     }
-    LATE = (LATE & 0xFD) | out; //Buzzer is on bit 1, don't change that pin
+
+    // Buzzer is on bit 1 of the port, so mask with 0xFD so we
+    // don't change that pin
+    LATE = (LATE & 0xFD) | out; 
 }

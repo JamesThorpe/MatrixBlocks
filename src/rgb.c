@@ -6,12 +6,24 @@ void updateAnimations(void);
 
 #define RGB_PIN LATGbits.LATG3
 
+/*
+    At 64 MHz, each clock cycle is 15.625ns.  An instruction takes 4 clock 
+    cycles.
+
+    The SK6812 LEDs require a high/low period of 0.6us/0.6us for a 1 and 
+    0.3us/0.9us for a 0, all of which only need to be within +/- 0.15us.
+
+    The below gives us delays of 0.310us, 0.620us and 0.930us, which is
+    well within parameters.
+
+*/
 #define delay60() asm("nop");
 #define delay300() delay60() delay60() delay60() delay60() delay60()
 #define delay600() delay300() delay300()
 #define delay900() delay600() delay300()
     
-//Gamma correction lookup table from https://learn.adafruit.com/led-tricks-gamma-correction/the-quick-fix
+// Gamma correction lookup table from 
+// https://learn.adafruit.com/led-tricks-gamma-correction/the-quick-fix
 const uint8_t gamma8[] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,
@@ -90,6 +102,7 @@ void rgb_sendUpdate(void) {
     }
 
     interrupts_enableGlobalInterrupts();
+    rgbTickCounter = 0;
 }
 
 
@@ -130,8 +143,6 @@ void updateAnimations() {
             }
         }
     }
-
-    rgbTickCounter = 0;
 }
 
 bool rgb_updateDue(void) {
