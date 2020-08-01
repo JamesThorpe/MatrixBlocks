@@ -205,6 +205,26 @@
 #define IO_RE7_SetAnalogMode()      do { ANSELEbits.ANSELE7 = 1; } while(0)
 #define IO_RE7_SetDigitalMode()     do { ANSELEbits.ANSELE7 = 0; } while(0)
 
+// get/set IO_RG3 aliases
+#define IO_RG3_TRIS                 TRISGbits.TRISG3
+#define IO_RG3_LAT                  LATGbits.LATG3
+#define IO_RG3_PORT                 PORTGbits.RG3
+#define IO_RG3_WPU                  WPUGbits.WPUG3
+#define IO_RG3_OD                   ODCONGbits.ODCG3
+#define IO_RG3_ANS                  ANSELGbits.ANSELG3
+#define IO_RG3_SetHigh()            do { LATGbits.LATG3 = 1; } while(0)
+#define IO_RG3_SetLow()             do { LATGbits.LATG3 = 0; } while(0)
+#define IO_RG3_Toggle()             do { LATGbits.LATG3 = ~LATGbits.LATG3; } while(0)
+#define IO_RG3_GetValue()           PORTGbits.RG3
+#define IO_RG3_SetDigitalInput()    do { TRISGbits.TRISG3 = 1; } while(0)
+#define IO_RG3_SetDigitalOutput()   do { TRISGbits.TRISG3 = 0; } while(0)
+#define IO_RG3_SetPullup()          do { WPUGbits.WPUG3 = 1; } while(0)
+#define IO_RG3_ResetPullup()        do { WPUGbits.WPUG3 = 0; } while(0)
+#define IO_RG3_SetPushPull()        do { ODCONGbits.ODCG3 = 0; } while(0)
+#define IO_RG3_SetOpenDrain()       do { ODCONGbits.ODCG3 = 1; } while(0)
+#define IO_RG3_SetAnalogMode()      do { ANSELGbits.ANSELG3 = 1; } while(0)
+#define IO_RG3_SetDigitalMode()     do { ANSELGbits.ANSELG3 = 0; } while(0)
+
 /**
    @Param
     none

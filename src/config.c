@@ -121,7 +121,7 @@ void config_initialisePins(void)
     TRISE = 0x02; //0 = Power LED, 2-7 = Status LEDs
     TRISF = 0xFF;
     TRISA = 0xFF;
-    TRISG = 0xDF;
+    TRISG = 0xD7; //3 = RGB Data
     TRISB = 0xFF;
     TRISH = 0x0F;
     TRISC = 0xFF;
@@ -133,7 +133,7 @@ void config_initialisePins(void)
     ANSELD = 0xFF;
     ANSELB = 0xFF;
     ANSELE = 0x02; //0 = Power LED, 2-7 = Status LEDs, no Analog
-    ANSELG = 0xFF;
+    ANSELG = 0xF7; //3 = RGB Data
     ANSELF = 0xFF;
     ANSELA = 0xFF;
 

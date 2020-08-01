@@ -4,12 +4,7 @@
 uint8_t rgbTickCounter;
 void updateAnimations(void);
 
-
-
-//TODO: verify correct pin
-#define rgb_setHigh() (LATGbits.LATG3 = 1)
-#define rgb_setLow() (LATGbits.LATG3 = 0)
-
+#define RGB_PIN LATGbits.LATG3
 
 #define delay60() asm("nop");
 #define delay300() delay60() delay60() delay60() delay60() delay60()
@@ -80,14 +75,14 @@ void rgb_sendUpdate(void) {
         for (x = 0; x < 4; x++) {
             for (uint8_t ledBit = 0x80; ledBit != 0; ledBit >>= 1) {
                 if (ledData[ledBase+x] & ledBit) {
-                    rgb_setHigh();
+                    RGB_PIN = 1;
                     delay600();
-                    rgb_setLow();
+                    RGB_PIN = 0;
                     delay600();
                 } else {
-                    rgb_setHigh();
+                    RGB_PIN = 1;
                     delay300();
-                    rgb_setLow();
+                    RGB_PIN = 0;
                     delay900();
                 }
             }
