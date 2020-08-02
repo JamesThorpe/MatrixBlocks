@@ -23,3 +23,40 @@ void status_sendUpdate(void) {
     // don't change that pin
     LATE = (LATE & 0xFD) | out; 
 }
+
+void status_animateLed(uint8_t led, uint16_t onCount, uint16_t offCount) {
+    status_leds[led].on = true;
+    status_leds[led].onCount = status_leds[led].counter = onCount;
+    status_leds[led].offCount = offCount;
+}
+
+void status_setLed(uint8_t led, bool on) {
+    status_leds[led].on = on;
+    status_leds[led].counter = 0;
+}
+
+void status_tick(void) {
+    bool isUpdateNeeded = false;
+
+    for (uint8_t x = 1; x < 7; x++) {
+        status_led* led = &status_leds[x];
+        if (led->counter > 0) {
+            led->counter--;
+            if (led->counter == 0) {
+                if (led->on) {
+                    led->counter = led->offCount;
+                    led->on = false;
+                    isUpdateNeeded = true;
+                } else {
+                    led->counter = led->onCount;
+                    led->on = true;
+                    isUpdateNeeded = true;
+                }
+            }
+        }
+    }
+
+    if (isUpdateNeeded) {
+        status_sendUpdate();
+    }
+}

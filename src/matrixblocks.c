@@ -11,8 +11,7 @@ void main(void) {
     interrupts_init();
     interrupts_enableGlobalInterrupts();
 
-    status_pwr_led->on = 1;
-    status_sendUpdate();
+    status_setLed(0, true);
     
     while(true) {
         if (millisecondPassed) {
@@ -29,6 +28,7 @@ void isr_millisecondTimer(void) {
 
 void millisecond() {
     rgb_tick();
+    status_tick();
 
     //TODO: this should be done in the IR code when not transmitting
     if (rgb_updateDue()) {
