@@ -38,7 +38,7 @@ void status_setLed(uint8_t led, bool on) {
 void status_tick(void) {
     bool isUpdateNeeded = false;
 
-    for (uint8_t x = 1; x < 7; x++) {
+    for (uint8_t x = 0; x < 7; x++) {
         status_led* led = &status_leds[x];
         if (led->counter > 0) {
             led->counter--;
