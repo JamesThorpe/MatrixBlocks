@@ -13,6 +13,8 @@
 #include "interrupts.h"
 #include "rgb.h"
 #include "status.h"
+#include "button.h"
+#include "ir.h"
 
 void main(void);
 void isr_millisecondTimer(void);

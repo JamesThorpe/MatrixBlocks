@@ -30,9 +30,11 @@ void status_animateLed(uint8_t led, uint16_t onCount, uint16_t offCount) {
     status_leds[led].offCount = offCount;
 }
 
+bool externalUpdate = false;
 void status_setLed(uint8_t led, bool on) {
     status_leds[led].on = on;
     status_leds[led].counter = 0;
+    externalUpdate = true;
 }
 
 void status_tick(void) {
@@ -56,7 +58,8 @@ void status_tick(void) {
         }
     }
 
-    if (isUpdateNeeded) {
+    if (isUpdateNeeded || externalUpdate) {
+        externalUpdate = false;
         status_sendUpdate();
     }
 }

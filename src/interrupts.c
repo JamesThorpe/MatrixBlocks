@@ -12,8 +12,5 @@ void __interrupt() interrupts_mainIsr(void) {
     } else if (false) { //TODO: Check ir timer interrupt flag
 
         //TODO: reset ir timer interrupt flag
-    } else if (false) { //TODO: check button interrupt flag
-
-        //TODO: reset button interrupt flag
     }
 }
