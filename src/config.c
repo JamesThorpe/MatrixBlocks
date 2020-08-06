@@ -120,7 +120,7 @@ void config_initialisePins(void)
     */
     TRISE = 0x02; //0 = Power LED, 2-7 = Status LEDs
     TRISF = 0xFF;
-    TRISA = 0xFF;
+    TRISA = 0xC0; //0-5 = IR TX
     TRISG = 0xD7; //3 = RGB Data
     TRISB = 0xFF;
     TRISH = 0x0F;
@@ -134,14 +134,14 @@ void config_initialisePins(void)
     ANSELB = 0xFF;
     ANSELE = 0x02; //0 = Power LED, 2-7 = Status LEDs, no Analog
     ANSELG = 0xF7; //3 = RGB Data
-    ANSELF = 0xFF;
-    ANSELA = 0xFF;
+    ANSELF = 0x03; //2-7 = IR RX
+    ANSELA = 0xC0; //0-5 = IR TX
 
     /**
     WPUx registers
     */
     WPUD = 0x00;
-    WPUF = 0x00;
+    WPUF = 0xFC; //2-7 = IR RX
     WPUE = 0x00;
     WPUB = 0x00;
     WPUG = 0x00;
