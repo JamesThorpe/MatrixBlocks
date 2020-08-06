@@ -146,7 +146,7 @@ void config_initialisePins(void)
     WPUB = 0x00;
     WPUG = 0x00;
     WPUA = 0x00;
-    WPUC = 0x00;
+    WPUC = 0xCF; //0-3, 6-7 = buttons
     WPUH = 0x00;
 
     /**
