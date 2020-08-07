@@ -6,9 +6,9 @@ void interrupts_init(void) {
 
 
 void __interrupt() interrupts_mainIsr(void) {
-    if (false) { //TODO: Check ms timer interrupt flag
+    if (PIE0bits.TMR0IE == 1 && PIR0bits.TMR0IF == 1) {
         isr_millisecondTimer();
-        //TODO: reset ms timer interrupt flag
+        PIR0bits.TMR0IF = 0;
     } else if (false) { //TODO: Check ir timer interrupt flag
 
         //TODO: reset ir timer interrupt flag

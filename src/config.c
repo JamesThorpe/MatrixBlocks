@@ -62,11 +62,13 @@
 void config_initialiseOscillator(void);
 void config_initialisePMD(void);
 void config_initialisePins(void);
+void config_initialiseTimers(void);
 
 void config_init(void) {
     config_initialisePMD();
     config_initialisePins();
     config_initialiseOscillator();
+    config_initialiseTimers();
 }
 
 void config_initialiseOscillator(void)
@@ -185,4 +187,16 @@ void config_initialisePins(void)
     INLVLG = 0xFF;
     INLVLH = 0xFF;
     
+}
+
+
+void config_initialiseTimers(void) {
+    // Timer 0 - 1 ms
+
+    T0CON1 = 0x68;
+    TMR0H = 0x7C;
+    TMR0L = 0x00;
+    PIR0bits.TMR0IF = 0;
+    PIE0bits.TMR0IE = 1;
+    T0CON0 = 0x81;
 }

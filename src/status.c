@@ -15,18 +15,19 @@ void status_sendUpdate(void) {
     }
     for (uint8_t x = 1; x < 7; x++) {
         if (status_leds[x].on) {
-            out |= 1 << (8-x);
+            out |= (1 << (8-x));
         }
     }
 
     // Buzzer is on bit 1 of the port, so mask with 0xFD so we
     // don't change that pin
-    LATE = (LATE & 0xFD) | out; 
+    LATE = (LATE & 0x2) | out; 
 }
 
 void status_animateLed(uint8_t led, uint16_t onCount, uint16_t offCount) {
     status_leds[led].on = true;
-    status_leds[led].onCount = status_leds[led].counter = onCount;
+    status_leds[led].onCount = onCount;
+    status_leds[led].counter = onCount;
     status_leds[led].offCount = offCount;
 }
 
@@ -57,8 +58,8 @@ void status_tick(void) {
             }
         }
     }
-
-    if (isUpdateNeeded || externalUpdate) {
+    status_pwr_led->on = !status_pwr_led->on;
+    if (isUpdateNeeded || externalUpdate || true) {
         externalUpdate = false;
         status_sendUpdate();
     }
