@@ -11,6 +11,11 @@ void main(void) {
     interrupts_init();
     interrupts_enableGlobalInterrupts();
 
+    while (true) {
+        LATE = 0xFF;
+    }
+    
+    
     status_setLed(0, true);
     
     while(true) {

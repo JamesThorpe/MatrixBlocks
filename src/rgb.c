@@ -55,15 +55,13 @@ void rgb_sendUpdate(void) {
     uint8_t ledData[19*4];
     uint8_t ledBase = 0;
     uint8_t white;
-    uint8_t x;
-    for (x = 19; x > 0;) {
-        
+    uint8_t x = 18;
+    do {
         uint8_t r, g, b;
         r = gamma8[rgb_leds[x].red];
         g = gamma8[rgb_leds[x].green];
         b = gamma8[rgb_leds[x].blue];
 
-        x--;
         if (r < g) {
             white = r;
         } else {
@@ -77,10 +75,10 @@ void rgb_sendUpdate(void) {
         ledData[ledBase+2] = b - white;
         ledData[ledBase+3] = white;
         ledBase += 4;
-    }
+    } while (x-- > 0);
 
 
-
+    
     interrupts_disableGlobalInterrupts();
     //send it
     for(ledBase = 0; ledBase < 19; ledBase++) {

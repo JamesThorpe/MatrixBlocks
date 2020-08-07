@@ -1,0 +1,21 @@
+The tiles have a 45mm PCB hex "radius" (center to corner).
+
+This gives a center to PCB edge distance of 38.971.
+With a 2mm 3d print edge, the center-overall edge distance is 40.971.
+
+Two tiles have a center-center disance = 81.942.
+With 2 rings of LEDs, that gives a led-led center of 16.3884 to maintain the same distance between LEDs on adjacent tiles.
+
+Inner ring LED centres:
+  8.194 / 14.193 / 16.388
+ 
+Outer ring LED centres:
+  16.388 / 28.386 / 32.777
+
+IR LEDs
+  12.25 / 37
+  25.918 / 29.109
+  7.65 / 38.217
+
+Pushbuttons:
+  11.25 / 19.486 / 22.5
