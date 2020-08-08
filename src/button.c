@@ -19,6 +19,15 @@ Port C
 
 uint8_t btnCounter = 0;
 
+void button_init(void) {
+    button1 = &buttons[0];
+    button2 = &buttons[1];
+    button3 = &buttons[2];
+    button4 = &buttons[3];
+    button5 = &buttons[4];
+    button6 = &buttons[5];
+}
+
 void button_tick(void) {
     if (++btnCounter < 5) {
         return;
@@ -31,12 +40,12 @@ void button_tick(void) {
     *button5 <<= 1;
     *button6 <<= 1;
 
-    *button1 |= ((LATC & 0x8) >> 3);
-    *button2 |= (LATC & 0x1);
-    *button3 |= ((LATC & 0x2) >> 1);
-    *button4 |= ((LATC & 0x40) >> 6);
-    *button5 |= ((LATC & 0x80) >> 7);
-    *button6 |= ((LATC & 0x4) >> 2);
+    *button1 |= ((PORTC & 0x8) >> 3);
+    *button2 |= (PORTC & 0x1);
+    *button3 |= ((PORTC & 0x2) >> 1);
+    *button4 |= ((PORTC & 0x40) >> 6);
+    *button5 |= ((PORTC & 0x80) >> 7);
+    *button6 |= ((PORTC & 0x4) >> 2);
 }
 
 bool button_isUp(uint8_t *button) {

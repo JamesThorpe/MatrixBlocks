@@ -55,8 +55,8 @@ void rgb_sendUpdate(void) {
     uint8_t ledData[19*4];
     uint8_t ledBase = 0;
     uint8_t white;
-    uint8_t x = 18;
-    do {
+    uint8_t x = 0;
+    for (x = 0; x < 19; x++) {
         uint8_t r, g, b;
         r = gamma8[rgb_leds[x].red];
         g = gamma8[rgb_leds[x].green];
@@ -75,31 +75,32 @@ void rgb_sendUpdate(void) {
         ledData[ledBase+2] = b - white;
         ledData[ledBase+3] = white;
         ledBase += 4;
-    } while (x-- > 0);
+    }
 
 
     
     interrupts_disableGlobalInterrupts();
     //send it
-    for(ledBase = 0; ledBase < 19; ledBase++) {
-        for (x = 0; x < 4; x++) {
-            for (uint8_t ledBit = 0x80; ledBit != 0; ledBit >>= 1) {
-                if (ledData[ledBase+x] & ledBit) {
-                    RGB_PIN = 1;
-                    delay600();
-                    RGB_PIN = 0;
-                    delay600();
-                } else {
-                    RGB_PIN = 1;
-                    delay300();
-                    RGB_PIN = 0;
-                    delay900();
-                }
+    for(ledBase = 0; ledBase < 76; ledBase++) {
+        for (uint8_t ledBit = 8; ledBit > 0; ) {
+            ledBit--;
+            if (ledData[ledBase] & (1<<ledBit)) {
+                RGB_PIN = 1;
+                delay600();
+                RGB_PIN = 0;
+                delay600();
+            } else {
+                RGB_PIN = 1;
+                delay300();
+                RGB_PIN = 0;
+                delay900();
             }
         }
+
     }
 
     interrupts_enableGlobalInterrupts();
+    RGB_PIN = 0;
     rgbTickCounter = 0;
 }
 
@@ -134,10 +135,10 @@ void updateAnimations() {
                 led->blue = led->animation.b_e;
                 led->animation.time = 0;
             } else {
-                int16_t animAmount = (led->animation.elapsed / led->animation.time);
-                led->red = led->animation.r_s + (((int16_t)(led->animation.r_s) - (int16_t)(led->animation.r_e)) * animAmount);
-                led->green = led->animation.g_s + (((int16_t)(led->animation.g_s) - (int16_t)(led->animation.g_e)) * animAmount);
-                led->blue = led->animation.b_s + (((int16_t)(led->animation.b_s) - (int16_t)(led->animation.b_e)) * animAmount);
+                float animAmount = ((float)led->animation.elapsed / (float)led->animation.time);
+                led->red = led->animation.r_s - (((int16_t)(led->animation.r_s) - (int16_t)(led->animation.r_e)) * animAmount);
+                led->green = led->animation.g_s - (((int16_t)(led->animation.g_s) - (int16_t)(led->animation.g_e)) * animAmount);
+                led->blue = led->animation.b_s - (((int16_t)(led->animation.b_s) - (int16_t)(led->animation.b_e)) * animAmount);
             }
         }
     }

@@ -4,7 +4,7 @@
 
 
 void status_init(void) {
-    
+     status_pwr_led = &status_leds[0];
 }
 
 
@@ -58,7 +58,7 @@ void status_tick(void) {
             }
         }
     }
-    status_pwr_led->on = !status_pwr_led->on;
+    
     if (isUpdateNeeded || externalUpdate || true) {
         externalUpdate = false;
         status_sendUpdate();

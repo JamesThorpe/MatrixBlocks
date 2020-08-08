@@ -5,12 +5,13 @@
 
 uint8_t buttons[6];
 
-uint8_t *button1 = &buttons[0],
-        *button2 = &buttons[1],
-        *button3 = &buttons[2],
-        *button4 = &buttons[3],
-        *button5 = &buttons[4],
-        *button6 = &buttons[5];
+uint8_t *button1;
+uint8_t *button2;
+uint8_t *button3;
+uint8_t *button4;
+uint8_t *button5;
+uint8_t *button6;
+
 
 void button_init(void);
 void button_tick(void);
