@@ -5,6 +5,7 @@ uint8_t rgbTickCounter;
 void updateAnimations(void);
 
 #define RGB_PIN LATGbits.LATG3
+#define BRIGHTNESSDIVISOR 3
 
 /*
     At 64 MHz, each clock cycle is 15.625ns.  An instruction takes 4 clock 
@@ -58,9 +59,9 @@ void rgb_sendUpdate(void) {
     uint8_t x = 0;
     for (x = 0; x < 19; x++) {
         uint8_t r, g, b;
-        r = gamma8[rgb_leds[x].red];
-        g = gamma8[rgb_leds[x].green];
-        b = gamma8[rgb_leds[x].blue];
+        r = gamma8[rgb_leds[x].red] / BRIGHTNESSDIVISOR;
+        g = gamma8[rgb_leds[x].green] / BRIGHTNESSDIVISOR;
+        b = gamma8[rgb_leds[x].blue] / BRIGHTNESSDIVISOR;
 
         if (r < g) {
             white = r;
