@@ -4,24 +4,26 @@
 #include "matrixblocks.h"
 
 #define RGB_FPS 24
-
+#define RGB_ANIMATION_BUFFERSIZE 5
 
 typedef struct rgb_animation {
-    uint8_t r_s;
-    uint8_t r_e;
-    uint8_t g_s;
-    uint8_t g_e;
-    uint8_t b_s;
-    uint8_t b_e;
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
     uint16_t time;
-    uint16_t elapsed;
+    bool repeat;
 } rgb_animation;
 
 typedef struct rgb_led {
     uint8_t red;
     uint8_t green;
     uint8_t blue;
-    rgb_animation animation;
+    uint16_t elapsed;
+    uint8_t redStart;
+    uint8_t greenStart;
+    uint8_t blueStart;
+    rgb_animation animations[RGB_ANIMATION_BUFFERSIZE];
+    int8_t animation;
 } rgb_led;
 
 rgb_led rgb_leds[19];

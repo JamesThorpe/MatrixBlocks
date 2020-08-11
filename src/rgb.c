@@ -44,6 +44,19 @@ const uint8_t gamma8[] = {
   215,218,220,223,225,228,231,233,236,239,241,244,247,249,252,255 };
 
 void rgb_init(void) {
+
+    for (uint8_t x = 0; x < 19; x++) {
+        rgb_leds[x].red = 0;
+        rgb_leds[x].green = 0;
+        rgb_leds[x].blue = 0;
+        rgb_leds[x].elapsed = 0;
+        rgb_leds[x].animation = -1;
+        for (uint8_t y = 0; y < RGB_ANIMATION_BUFFERSIZE; y++) {
+            rgb_leds[x].animations[y].time = 0;
+        }
+        
+    }
+
     rgb_center = &rgb_leds[0];
     rgb_innerRing = &rgb_leds[1];
     rgb_outerRing = &rgb_leds[7];
@@ -116,30 +129,61 @@ void rgb_tick(void) {
     rgbTickCounter++;
 }
 void rgb_animateled(uint8_t led, uint8_t r, uint8_t g, uint8_t b, uint16_t time) {
-    rgb_leds[led].animation.r_s = rgb_leds[led].red;
-    rgb_leds[led].animation.g_s = rgb_leds[led].green;
-    rgb_leds[led].animation.b_s = rgb_leds[led].blue;
-    rgb_leds[led].animation.r_e = r;
-    rgb_leds[led].animation.g_e = g;
-    rgb_leds[led].animation.b_e = b;
-    rgb_leds[led].animation.time = time;
-    rgb_leds[led].animation.elapsed = 0;
+    if (time == 0) {
+        time = 1;
+    }
+    int8_t anim;
+    if (rgb_leds[led].animation >= 0) {
+        anim = rgb_leds[led].animation + 1;
+        while (anim < RGB_ANIMATION_BUFFERSIZE) {
+            if (rgb_leds[led].animations[anim].time == 0) {
+                break;
+            }
+            anim++;
+        }
+        if (anim >= RGB_ANIMATION_BUFFERSIZE) {
+            return;
+        }
+    } else {
+        anim = 0;
+        rgb_leds[led].animation = 0;
+        rgb_leds[led].redStart = rgb_leds[led].red;
+        rgb_leds[led].greenStart = rgb_leds[led].green;
+        rgb_leds[led].blueStart = rgb_leds[led].blue;
+        rgb_leds[led].elapsed = 0;
+    }
+    rgb_leds[led].animations[anim].red = r;
+    rgb_leds[led].animations[anim].green = g;
+    rgb_leds[led].animations[anim].blue = b;
+    rgb_leds[led].animations[anim].time = time;
 }
 void updateAnimations() {
     for (uint8_t x = 0; x < 19; x++) {
         rgb_led* led = &rgb_leds[x];
-        if (led->animation.time != 0) {
-            led->animation.elapsed += rgbTickCounter;
-            if (led->animation.elapsed >= led->animation.time) {
-                led->red = led->animation.r_e;
-                led->green = led->animation.g_e;
-                led->blue = led->animation.b_e;
-                led->animation.time = 0;
+        if (led->animation != -1) {
+            led->elapsed += rgbTickCounter;
+            if (led->elapsed >= led->animations[led->animation].time) {
+                led->red = led->animations[led->animation].red;
+                led->green = led->animations[led->animation].green;
+                led->blue = led->animations[led->animation].blue;
+
+                led->animations[led->animation].time = 0;
+
+                int8_t anim = led->animation + 1;
+                if (anim < RGB_ANIMATION_BUFFERSIZE && led->animations[anim].time != 0) {
+                    led->animation = anim;
+                    led->redStart = led->red;
+                    led->greenStart = led->green;
+                    led->blueStart = led->blue;
+                    led->elapsed = 0;
+                } else {
+                    led->animation = -1;
+                }
             } else {
-                float animAmount = ((float)led->animation.elapsed / (float)led->animation.time);
-                led->red = led->animation.r_s - (((int16_t)(led->animation.r_s) - (int16_t)(led->animation.r_e)) * animAmount);
-                led->green = led->animation.g_s - (((int16_t)(led->animation.g_s) - (int16_t)(led->animation.g_e)) * animAmount);
-                led->blue = led->animation.b_s - (((int16_t)(led->animation.b_s) - (int16_t)(led->animation.b_e)) * animAmount);
+                float animAmount = ((float)led->elapsed / (float)led->animations[led->animation].time);
+                led->red = led->redStart - (((int16_t)(led->redStart) - (int16_t)(led->animations[led->animation].red)) * animAmount);
+                led->green = led->greenStart - (((int16_t)(led->greenStart) - (int16_t)(led->animations[led->animation].green)) * animAmount);
+                led->blue = led->blueStart - (((int16_t)(led->blueStart) - (int16_t)(led->animations[led->animation].blue)) * animAmount);
             }
         }
     }

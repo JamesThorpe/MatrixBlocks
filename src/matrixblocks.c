@@ -56,7 +56,9 @@ void main(void) {
 
         for (uint8_t x = 0; x < 6; x++) {
             if (button_isPressed(&buttons[x])) {
-
+                rgb_setled(x+1, 0, 0, 255);
+                rgb_animateled(x+1, 255, 0, 0, 2000);
+                rgb_animateled(x+1, 0, 255, 0, 1000);
                 if (status_leds[x + 1].counter == 0) {
                     status_animateLed(x + 1, 800, 200);
                 } else {
@@ -85,7 +87,13 @@ void millisecond() {
         for (uint8_t bx = 0; bx < 19; bx++) {
             rgb_setled(bx, 255, 255, 255);
         }
-    } else {    
+    } else if (button_isReleased(button1)) {
+        for (uint8_t bx = 0; bx < 19; bx++) {
+            rgb_animateled(bx, 255, 0, 0, 200);
+            rgb_animateled(bx, 0, 255, 0, 200);
+            rgb_animateled(bx, 0, 0, 255, 200);
+        }
+    }else {    
         c++;
         if (c == 9) {
             c = 0;
@@ -107,14 +115,7 @@ void millisecond() {
 
                 rgb_setled(x, r, g, b);
             }
-            for (x = 6; x > 0; x--) {
-                lcx = lc + ((6-x)*60);
-                r = lights[((lcx%360)+120)%360];
-                g = lights[lcx%360];
-                b = lights[((lcx%360)+240)%360];
-
-                rgb_setled(x, r, g, b);
-            }
+           
             if (lc == 360) {
                 lc = 0;
             }
