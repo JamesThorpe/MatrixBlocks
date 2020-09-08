@@ -54,7 +54,7 @@ void main(void) {
             millisecondPassed = false;
         }
 
-        for (uint8_t x = 0; x < 6; x++) {
+        /*for (uint8_t x = 0; x < 6; x++) {
             if (button_isPressed(&buttons[x])) {
                 rgb_setled(x+1, 0, 0, 255);
                 rgb_animateled(x+1, 255, 0, 0, 2000);
@@ -65,7 +65,7 @@ void main(void) {
                     status_setLed(x + 1, false);
                 }
             }
-        }
+        }*/
     }
 }
 
@@ -76,13 +76,36 @@ void isr_millisecondTimer(void) {
 
 int lc = 0;
 int c = 0;
+int txc = 0;
 
 void millisecond() {
     rgb_tick();
     status_tick();
     button_tick();
 
-    
+    txc++;
+    if (txc == 500) {
+        LATAbits.LATA0 = 1;
+        LATAbits.LATA1 = 1;
+    } else if (txc == 1000) {
+        LATAbits.LATA0 = 0;
+        LATAbits.LATA1 = 0;
+        txc = 0;
+    }
+
+    if (PORTF & (1 << 7)) {
+        status_setLed(1, true);
+    } else {
+        status_setLed(1, false);
+    }
+
+    if (PORTF & (1 << 6)) {
+        status_setLed(2, true);
+    } else {
+        status_setLed(2, false);
+    }
+
+    /*
     if (button_isDown(button1)) {
         for (uint8_t bx = 0; bx < 19; bx++) {
             rgb_setled(bx, 255, 255, 255);
@@ -93,7 +116,7 @@ void millisecond() {
             rgb_animateled(bx, 0, 255, 0, 200);
             rgb_animateled(bx, 0, 0, 255, 200);
         }
-    }else {    
+    }else {*/
         c++;
         if (c == 9) {
             c = 0;
@@ -121,7 +144,7 @@ void millisecond() {
             }
 
         }
-    }
+    /*}*/
 
     
     //TODO: this should be done in the IR code when not transmitting

@@ -22,6 +22,12 @@ struct vsc_INTCONbits {
 
 struct vsc_INTCONbits INTCONbits;
 
+struct vsc_LATAbits {
+    uint8_t LATA0;
+    uint8_t LATA1;
+};
+
+struct vsc_LATAbits LATAbits;
 
 struct vsc_LATGbits {
     uint8_t LATG3;
@@ -38,6 +44,8 @@ struct vsc_PIE0bits {
     uint8_t TMR0IE;
 };
 struct vsc_PIE0bits PIE0bits;
+
+uint8_t PORTC, PORTF;
 
 uint8_t OSCCON1, OSCCON3, OSCEN, OSCFRQ, OSCTUNE;
 uint8_t PMD0, PMD1, PMD2, PMD3, PMD4, PMD5;
