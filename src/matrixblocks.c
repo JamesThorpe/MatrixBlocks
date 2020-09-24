@@ -16,139 +16,80 @@ const uint8_t lights[360]={
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+uint8_t lastPing[6];
+uint8_t lastPong[6];
 
 void main(void) {
     config_init();
     button_init();
     rgb_init();
     status_init();
+    ir_init();
+    comms_init();
     interrupts_init();
     interrupts_enableGlobalInterrupts();
 
-    
+    for (uint8_t x = 0; x < 6; x++) {
+        lastPong[x] = 200;
+        lastPing[x] = 0;
+    }
+
     status_setLed(0, true);
     
-   
-    /*status_animateLed(1, 200, 800);
-    status_animateLed(2, 300, 700);
-    status_animateLed(3, 400, 600);
-    status_animateLed(4, 500, 500);
-    status_animateLed(5, 600, 400);
-    status_animateLed(6, 700, 300);*/
-    
-    /*
-    for (uint8_t x = 0; x < 18; x++) {
-        if (x%3 == 0) {
-            rgb_setled(x, 255, 0, 0);
-        } else if (x%3 == 1) {
-            rgb_setled(x, 0, 255, 0);
-        } else {
-            rgb_setled(x, 0, 0, 255);
-        }
-    }
-    rgb_setled(18, 100, 100, 100);*/
-
     while(true) {
+        comms_poll();
         if (millisecondPassed) {
             millisecond();
             millisecondPassed = false;
         }
-
-        /*for (uint8_t x = 0; x < 6; x++) {
-            if (button_isPressed(&buttons[x])) {
-                rgb_setled(x+1, 0, 0, 255);
-                rgb_animateled(x+1, 255, 0, 0, 2000);
-                rgb_animateled(x+1, 0, 255, 0, 1000);
-                if (status_leds[x + 1].counter == 0) {
-                    status_animateLed(x + 1, 800, 200);
-                } else {
-                    status_setLed(x + 1, false);
-                }
-            }
-        }*/
     }
 }
-
 
 void isr_millisecondTimer(void) {
     millisecondPassed = true;
 }
 
-int lc = 0;
-int c = 0;
-int txc = 0;
+uint8_t comCount = 0;
 
 void millisecond() {
     rgb_tick();
     status_tick();
     button_tick();
 
-    txc++;
-    if (txc == 500) {
-        LATAbits.LATA0 = 1;
-        LATAbits.LATA1 = 1;
-    } else if (txc == 1000) {
-        LATAbits.LATA0 = 0;
-        LATAbits.LATA1 = 0;
-        txc = 0;
-    }
-
-    if (PORTF & (1 << 7)) {
-        status_setLed(1, true);
-    } else {
-        status_setLed(1, false);
-    }
-
-    if (PORTF & (1 << 6)) {
-        status_setLed(2, true);
-    } else {
-        status_setLed(2, false);
-    }
-
-    /*
-    if (button_isDown(button1)) {
-        for (uint8_t bx = 0; bx < 19; bx++) {
-            rgb_setled(bx, 255, 255, 255);
-        }
-    } else if (button_isReleased(button1)) {
-        for (uint8_t bx = 0; bx < 19; bx++) {
-            rgb_animateled(bx, 255, 0, 0, 200);
-            rgb_animateled(bx, 0, 255, 0, 200);
-            rgb_animateled(bx, 0, 0, 255, 200);
-        }
-    }else {*/
-        c++;
-        if (c == 9) {
-            c = 0;
-            lc++;
-            int lcx;
-            uint8_t x;
-            uint8_t r, g, b;
-
-
-            g = lights[lc%360];
-
-            rgb_setled(0, g, g, g);
-
-            for (x = 7; x < 19; x++) {
-                lcx = lc + ((x-7)*30);
-                r = lights[((lcx%360)+120)%360];
-                g = lights[lcx%360];
-                b = lights[((lcx%360)+240)%360];
-
-                rgb_setled(x, r, g, b);
+    if (comCount++ == 200) {
+        for (uint8_t x = 0; x < 6; x++) {
+            status_setLed(x+1, lastPong[x] == lastPing[x]);
+            MsgPing ping;
+            lastPing[x]++;
+            if (lastPing[x] == 200) {
+                lastPing[x] = 0;
             }
-           
-            if (lc == 360) {
-                lc = 0;
-            }
-
+            ping.value = lastPing[x];
+            comms_sendMessage(&comms_ports[x], MSG_Ping, (uint8_t *)&ping, 1);
         }
-    /*}*/
+    }
+}
 
-    
-    //TODO: this should be done in the IR code when not transmitting
-    if (rgb_updateDue()) {
-        rgb_sendUpdate();
+
+
+void HandleMessage(uint8_t side, uint8_t msgType, uint8_t msgbytes[], uint8_t msglength) {
+    pMsgCommand pCommand;
+    pMsgPing pPing;
+    pMsgPong pPong;
+    switch (msgType) {
+        case MSG_Command:
+            pCommand = (pMsgCommand)msgbytes;
+            //Leds.Blue = pCommand->value ? 255 : 0;
+            break;
+        case MSG_Ping:
+            pPing = (pMsgPing)msgbytes;
+            MsgPong pong;
+            pong.value = pPing->value;
+            comms_sendMessage(&comms_ports[side-1], MSG_Pong, (uint8_t *)&pong, 1);
+            break;
+        case MSG_Pong:
+            pPong = (pMsgPong)msgbytes;
+            lastPong[side-1] = pPong->value;
+            break;
     }
 }

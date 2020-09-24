@@ -1,7 +1,7 @@
 #ifndef status_h
 #define status_h
 
-#include "matrixblocks.h"
+#include "common.h"
 
 typedef struct status_led {
     bool on;

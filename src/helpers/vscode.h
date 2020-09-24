@@ -25,6 +25,10 @@ struct vsc_INTCONbits INTCONbits;
 struct vsc_LATAbits {
     uint8_t LATA0;
     uint8_t LATA1;
+    uint8_t LATA2;
+    uint8_t LATA3;
+    uint8_t LATA4;
+    uint8_t LATA5;
 };
 
 struct vsc_LATAbits LATAbits;
@@ -40,10 +44,20 @@ struct vsc_PIR0bits {
 };
 struct vsc_PIR0bits PIR0bits;
 
+struct vsc_PIR5bits {
+    uint8_t TMR1IF;
+};
+struct vsc_PIR5bits PIR5bits;
+
 struct vsc_PIE0bits {
     uint8_t TMR0IE;
 };
 struct vsc_PIE0bits PIE0bits;
+
+struct vsc_PIE5bits {
+    uint8_t TMR1IE;
+};
+struct vsc_PIE5bits PIE5bits;
 
 uint8_t PORTC, PORTF;
 
@@ -57,3 +71,4 @@ uint8_t ODCONA, ODCONB, ODCONC, ODCOND, ODCONE, ODCONF, ODCONG, ODCONH;
 uint8_t SLRCONA, SLRCONB, SLRCONC, SLRCOND, SLRCONE, SLRCONF, SLRCONG, SLRCONH;
 uint8_t INLVLA, INLVLB, INLVLC, INLVLD, INLVLE, INLVLF, INLVLG, INLVLH;
 uint8_t T0CON1, TMR0H, TMR0L, T0CON0;
+uint8_t T1GCON, T1GATE, T1CLK, TMR1H, TMR1L, T1CON;

@@ -59,7 +59,7 @@ void status_tick(void) {
         }
     }
     
-    if (isUpdateNeeded || externalUpdate || true) {
+    if (isUpdateNeeded || externalUpdate || true) { //TODO, why is true on here?
         externalUpdate = false;
         status_sendUpdate();
     }

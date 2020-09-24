@@ -1,7 +1,7 @@
 #ifndef BUTTON_H
 #define	BUTTON_H
 
-#include "matrixblocks.h"
+#include "common.h"
 
 uint8_t buttons[6];
 

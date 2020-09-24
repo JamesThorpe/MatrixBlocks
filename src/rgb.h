@@ -1,7 +1,7 @@
 #ifndef rgb_h
 #define rgb_h
 
-#include "matrixblocks.h"
+#include "common.h"
 
 #define RGB_FPS 24
 #define RGB_ANIMATION_BUFFERSIZE 5

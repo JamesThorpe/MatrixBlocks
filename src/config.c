@@ -199,4 +199,14 @@ void config_initialiseTimers(void) {
     PIR0bits.TMR0IF = 0;
     PIE0bits.TMR0IE = 1;
     T0CON0 = 0x81;
+
+    //Timer 1 - 50us
+    T1GCON = 0x00;
+    T1GATE = 0x00;
+    T1CLK = 0x03;
+    TMR1H = 0xF3;
+    TMR1L = 0x80;
+    PIR5bits.TMR1IF = 0;
+    PIE5bits.TMR1IE = 1;
+    T1CON = 0x01;    
 }

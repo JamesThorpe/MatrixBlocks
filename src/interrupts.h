@@ -1,6 +1,7 @@
 #ifndef interrupts_h
 #define interrupts_h
 
+#include "common.h"
 #include "matrixblocks.h"
 
 #define interrupts_enableGlobalInterrupts() (INTCONbits.GIE = 1)
