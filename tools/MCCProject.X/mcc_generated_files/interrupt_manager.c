@@ -64,19 +64,11 @@ void __interrupt() INTERRUPT_InterruptManager (void)
     }
     else if(INTCONbits.PEIE == 1)
     {
-        if(PIE5bits.TMR1IE == 1 && PIR5bits.TMR1IF == 1)
+        if(PIE5bits.TMR2IE == 1 && PIR5bits.TMR2IF == 1)
         {
-            TMR1_ISR();
+            TMR2_ISR();
         } 
-        else
-        {
-            //Unhandled Interrupt
-        }
     }      
-    else
-    {
-        //Unhandled Interrupt
-    }
 }
 /**
  End of File

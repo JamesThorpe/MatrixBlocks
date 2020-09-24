@@ -28,6 +28,7 @@ void main(void) {
     comms_init();
     interrupts_init();
     interrupts_enableGlobalInterrupts();
+    //interrupts_enablePeripheralInterrupts();
 
     for (uint8_t x = 0; x < 6; x++) {
         lastPong[x] = 200;
