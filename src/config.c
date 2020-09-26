@@ -200,13 +200,15 @@ void config_initialiseTimers(void) {
     PIE0bits.TMR0IE = 1;
     T0CON0 = 0x81;
 
+    
     //Timer 2 - 50us
     T2CLKCON = 0x03;
-    T2HLT = 0x00;
+    T2HLT = 0x20;
     T2RST = 0x00;
     T2PR = 0xC7;
     T2TMR = 0x00;
     PIR5bits.TMR2IF = 0;
     PIE5bits.TMR2IE = 1;
-    T2CON = 0xC0;  
+    T2CON = 0x8F;  
+     
 }

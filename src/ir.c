@@ -148,7 +148,7 @@ void ir_tx(void) {
 
         for (uint8_t x = 0; x < 6; x++) {
             if (ir_ports[x].txHead != ir_ports[x].txTail) {
-                if (++ir_ports[x].txTail == BUFFERSIZE) {
+                if (++(ir_ports[x].txTail) == BUFFERSIZE) {
                     ir_ports[x].txTail = 0;
                 }
                 ir_ports[x].txActive = true;
@@ -181,7 +181,7 @@ void ir_rx(void) {
                 if (ir_ports[x].rxByte != ir_ports[x].rxLastByte) {
                     ir_ports[x].rxLastByte = ir_ports[x].rxByte;
                     ir_ports[x].rxBuffer[ir_ports[x].rxHead] = ir_ports[x].rxByte;
-                    if (++ir_ports[x].rxHead == BUFFERSIZE) {
+                    if (++(ir_ports[x].rxHead) == BUFFERSIZE) {
                         ir_ports[x].rxHead = 0;
                     }
                 }
@@ -198,7 +198,7 @@ void ir_period(void) {
 }
 
 void ir_send(ir_port* port, uint8_t data) {
-    if (++port->txHead == BUFFERSIZE) {
+    if (++(port->txHead) == BUFFERSIZE) {
         port->txHead = 0;
     }
     port->txBuffer[port->txHead] = data;
@@ -210,7 +210,7 @@ uint8_t ir_isReady(ir_port* port) {
 
 uint8_t ir_read(ir_port* port) {
     uint8_t b = port->rxBuffer[port->rxTail];
-    if (++port->rxTail == BUFFERSIZE) {
+    if (++(port->rxTail) == BUFFERSIZE) {
         port->rxTail = 0;
     }
     return b;

@@ -115,7 +115,6 @@ void rgb_sendUpdate(void) {
 
     interrupts_enableGlobalInterrupts();
     RGB_PIN = 0;
-    rgbTickCounter = 0;
 }
 
 
@@ -158,10 +157,12 @@ void rgb_animateled(uint8_t led, uint8_t r, uint8_t g, uint8_t b, uint16_t time)
     rgb_leds[led].animations[anim].time = time;
 }
 void updateAnimations() {
+    uint8_t tick = rgbTickCounter;
+    rgbTickCounter = 0;
     for (uint8_t x = 0; x < 19; x++) {
         rgb_led* led = &rgb_leds[x];
         if (led->animation != -1) {
-            led->elapsed += rgbTickCounter;
+            led->elapsed += tick;
             if (led->elapsed >= led->animations[led->animation].time) {
                 led->red = led->animations[led->animation].red;
                 led->green = led->animations[led->animation].green;

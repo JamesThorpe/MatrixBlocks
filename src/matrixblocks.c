@@ -28,7 +28,7 @@ void main(void) {
     comms_init();
     interrupts_init();
     interrupts_enableGlobalInterrupts();
-    //interrupts_enablePeripheralInterrupts();
+    interrupts_enablePeripheralInterrupts();
 
     for (uint8_t x = 0; x < 6; x++) {
         lastPong[x] = 200;
@@ -43,6 +43,7 @@ void main(void) {
             millisecond();
             millisecondPassed = false;
         }
+        
     }
 }
 
@@ -50,13 +51,13 @@ void isr_millisecondTimer(void) {
     millisecondPassed = true;
 }
 
-uint8_t comCount = 0;
 
+uint8_t comCount = 0;
 void millisecond() {
     rgb_tick();
     status_tick();
     button_tick();
-
+   
     if (comCount++ == 200) {
         for (uint8_t x = 0; x < 6; x++) {
             status_setLed(x+1, lastPong[x] == lastPing[x]);
