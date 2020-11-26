@@ -137,6 +137,13 @@ void ir_tx(void) {
             LATA = (LATA & 0xC0) | txByte;
         } else {
             txState = TXIDLE;
+            for (uint8_t x = 0; x < 6; x++) {
+                if (ir_ports[x].txActive) {
+                    if (++(ir_ports[x].txTail) == BUFFERSIZE) {
+                        ir_ports[x].txTail = 0;
+                    }
+                }
+            }
         }
     } else if (txState == TXIDLE) {
         if (rgb_updateDue()) {
@@ -148,9 +155,6 @@ void ir_tx(void) {
 
         for (uint8_t x = 0; x < 6; x++) {
             if (ir_ports[x].txHead != ir_ports[x].txTail) {
-                if (++(ir_ports[x].txTail) == BUFFERSIZE) {
-                    ir_ports[x].txTail = 0;
-                }
                 ir_ports[x].txActive = true;
                 txState = TXRESET;
             } else {
