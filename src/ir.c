@@ -37,6 +37,7 @@ uint8_t txState;
 uint8_t txCount;
 uint8_t txBit;
 uint8_t txRepeat;
+uint8_t txActiveHigh;
 
 void ir_init(void) {
     txState = TXIDLE;
@@ -52,7 +53,7 @@ void ir_init(void) {
         ir_ports[x].rxHead = 0;
         ir_ports[x].rxTail = 0;
         ir_ports[x].rxLastByte = 0;
-        ir_ports[x].rxMaskHigh = (1 << (8-x));
+        ir_ports[x].rxMaskHigh = (1 << (7-x));
     }
 
 }
@@ -61,13 +62,7 @@ void ir_tx(void) {
     if (txState == TXRESET) {
         if (txCount == 0) {
             //Start of reset, turn on LEDs on ports sending data
-            uint8_t txByte = 0;
-            for (uint8_t x = 0; x < 6; x++) {
-                if (ir_ports[x].txActive) {
-                    txByte |= ir_ports[x].txMaskHigh;
-                }
-            }
-            LATA = (LATA & 0xC0) | txByte;
+            LATA = (LATA & 0xC0) | txActiveHigh;
             txCount = IRRESET + IRRESETOFF;
             txRepeat = 2;
         } else {
@@ -78,13 +73,8 @@ void ir_tx(void) {
             } else if (txCount == 0) {
                 //End of reset, transition into first bit of byte on ports sending data
                 txState = TXBYTE;
-                uint8_t txByte = 0;
-                for (uint8_t x = 0; x < 6; x++) {
-                    if (ir_ports[x].txActive) {
-                        txByte |= ir_ports[x].txMaskHigh;
-                    }
-                }
-                LATA = (LATA & 0xC0) | txByte;
+                txBit = 7;
+                LATA = (LATA & 0xC0) | txActiveHigh;
                 txCount = IRBIT;
             }
         }
@@ -93,7 +83,7 @@ void ir_tx(void) {
             if (txCount) {
                 //mid bit, check counters and turn off LEDs when necessary
                 txCount--;
-                uint8_t txByte = 0;
+
                 if (txCount == IRZEROOFF) {
                     uint8_t txByte = LATA;
                     for (uint8_t x = 0; x < 6; x++) {
@@ -115,26 +105,14 @@ void ir_tx(void) {
                 //new bit, reset counter and turn LEDs back on
                 txBit--;
                 txCount = IRBIT;
-                uint8_t txByte = 0;
-                for (uint8_t x = 0; x < 6; x++) {
-                    if (ir_ports[x].txActive) {
-                        txByte |= ir_ports[x].txMaskHigh;
-                    }
-                }
-                LATA = (LATA & 0xC0) | txByte;                
+                LATA = (LATA & 0xC0) | txActiveHigh;                
             }
         } else if (txRepeat) {
             //repeat the byte
             txRepeat--;
-            txBit = 8;
-            txCount = IRBIT;
-            uint8_t txByte = 0;
-            for (uint8_t x = 0; x < 6; x++) {
-                if (ir_ports[x].txActive) {
-                    txByte |= ir_ports[x].txMaskHigh;
-                }
-            }
-            LATA = (LATA & 0xC0) | txByte;
+            txCount = IRRESET + IRRESETOFF;
+            txState = TXRESET;
+            LATA = (LATA & 0xC0) | txActiveHigh;
         } else {
             txState = TXIDLE;
             for (uint8_t x = 0; x < 6; x++) {
@@ -153,10 +131,12 @@ void ir_tx(void) {
             }
         }
 
+        txActiveHigh = 0;
         for (uint8_t x = 0; x < 6; x++) {
             if (ir_ports[x].txHead != ir_ports[x].txTail) {
                 ir_ports[x].txActive = true;
                 txState = TXRESET;
+                txActiveHigh |= ir_ports[x].txMaskHigh;
             } else {
                 ir_ports[x].txActive = false;
             }
@@ -208,8 +188,8 @@ void ir_send(ir_port* port, uint8_t data) {
     port->txBuffer[port->txHead] = data;
 }
 
-uint8_t ir_isReady(ir_port* port) {
-    return port->rxHead != port->rxTail;
+int8_t ir_isReady(ir_port* port) {
+    return port->rxHead - port->rxTail;
 }
 
 uint8_t ir_read(ir_port* port) {

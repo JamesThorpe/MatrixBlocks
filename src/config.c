@@ -210,5 +210,5 @@ void config_initialiseTimers(void) {
     PIR5bits.TMR2IF = 0;
     PIE5bits.TMR2IE = 1;
     T2CON = 0x8F;  
-     
+
 }

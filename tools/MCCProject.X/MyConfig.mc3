@@ -1,12 +1,12 @@
 <config configVersion="1.1" device="PIC18F66K40" coreVersion="4.85.0">
    <usedClasses class="java.util.HashMap">
       <entry>
-         <string>TMR0</string>
-         <string>class com.microchip.mcc.mcu8.modules.tmr0_mid0.TMR0</string>
-      </entry>
-      <entry>
          <string>System Module</string>
          <string>class com.microchip.mcc.mcu8.systemManager.SystemManager</string>
+      </entry>
+      <entry>
+         <string>TMR0</string>
+         <string>class com.microchip.mcc.mcu8.modules.tmr0_mid0.TMR0</string>
       </entry>
       <entry>
          <string>INTERNAL OSCILLATOR</string>
@@ -11072,12 +11072,12 @@
          <hash>ff37681a20232595860e5be60debb96e4e3c95d45368b793862c3d5f7f32040f</hash>
       </entry>
       <entry>
-         <file>mcc_generated_files\tmr2.c</file>
-         <hash>9e21613cab934de1348cdff7b0ace6cdb8a5417b08c5d5d60e59c914668d1ff1</hash>
-      </entry>
-      <entry>
          <file>mcc_generated_files\pin_manager.h</file>
          <hash>44d4a8db31f757db99f5d468c7b91e31bb448ffe8da2c6703957041abd3d6485</hash>
+      </entry>
+      <entry>
+         <file>mcc_generated_files\tmr2.c</file>
+         <hash>9e21613cab934de1348cdff7b0ace6cdb8a5417b08c5d5d60e59c914668d1ff1</hash>
       </entry>
       <entry>
          <file>mcc_generated_files\tmr0.c</file>

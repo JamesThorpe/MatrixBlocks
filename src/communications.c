@@ -28,7 +28,8 @@ void comms_init(void) {
 void comms_checkComms(comms_port* port)
 {
     uint8_t data;
-    while (ir_isReady(port->irPort)) {
+    int8_t isready = ir_isReady(port->irPort);
+    while (isready) {
         data = ir_read(port->irPort);
         if (port->State == STATE_WAITINGSTART && data == FRAMESTART) {
             port->State = STATE_INMESSAGE;
@@ -51,7 +52,9 @@ void comms_checkComms(comms_port* port)
         } else if (port->State == STATE_AFTERESCAPE) {
             port->Buffer[port->BufferPos++] = data ^ 0x20;
         }
+        isready = ir_isReady(port->irPort);
     }
+    
 }
 
 void comms_poll(void) {

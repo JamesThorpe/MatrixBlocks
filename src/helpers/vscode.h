@@ -18,6 +18,7 @@ away from MPLAB X, without a ton of warnings.
 struct vsc_INTCONbits {
     uint8_t GIE;
     uint8_t IPEN;
+    uint8_t PEIE;
 };
 
 struct vsc_INTCONbits INTCONbits;
