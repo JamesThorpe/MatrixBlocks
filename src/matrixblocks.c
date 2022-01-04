@@ -43,6 +43,27 @@ void main(void) {
             millisecond();
             millisecondPassed = false;
         }
+        //if (rgb_updateDue()) {
+        //    rgb_sendUpdate();
+        //}
+        
+        for (uint8_t x = 0; x < 6; x++) {
+            if (button_isPressed(&buttons[x])) {
+                
+                MsgCommand cmd;
+                cmd.value = x;
+                comms_sendMessage(&comms_ports[x], MSG_Command, (uint8_t *)&cmd, 1);
+                
+                //rgb_setled(x+1, 0, 0, 255);
+                //rgb_animateled(x+1, 255, 0, 0, 2000);
+                //rgb_animateled(x+1, 0, 255, 0, 1000);
+                /*if (status_leds[x + 1].counter == 0) {
+                    status_animateLed(x + 1, 800, 200);
+                } else {
+                    status_setLed(x + 1, false);
+                }*/
+            }
+        }
         
     }
 }
@@ -52,13 +73,16 @@ void isr_millisecondTimer(void) {
 }
 
 
-uint8_t comCount = 0;
+int comCount = 0;
 void millisecond() {
     rgb_tick();
     status_tick();
     button_tick();
-   
-    if (comCount++ == 200) {
+    
+    
+    
+    
+    /*if (comCount++ == 2000) {
         for (uint8_t x = 0; x < 6; x++) {
             status_setLed(x+1, lastPong[x] == lastPing[x]);
             MsgPing ping;
@@ -69,7 +93,7 @@ void millisecond() {
             ping.value = lastPing[x];
             comms_sendMessage(&comms_ports[x], MSG_Ping, (uint8_t *)&ping, 1);
         }
-    }
+    }*/
 }
 
 
@@ -81,13 +105,14 @@ void HandleMessage(uint8_t side, uint8_t msgType, uint8_t msgbytes[], uint8_t ms
     switch (msgType) {
         case MSG_Command:
             pCommand = (pMsgCommand)msgbytes;
+            status_toggleLed(side);
             //Leds.Blue = pCommand->value ? 255 : 0;
             break;
         case MSG_Ping:
             pPing = (pMsgPing)msgbytes;
             MsgPong pong;
             pong.value = pPing->value;
-            comms_sendMessage(&comms_ports[side-1], MSG_Pong, (uint8_t *)&pong, 1);
+            //comms_sendMessage(&comms_ports[side-1], MSG_Pong, (uint8_t *)&pong, 1);
             break;
         case MSG_Pong:
             pPong = (pMsgPong)msgbytes;

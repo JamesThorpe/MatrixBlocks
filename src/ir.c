@@ -25,8 +25,8 @@
 #define IRZEROOFF 6
 #define IRONEOFF 3
 
-#define IRRESET 9
-#define IRRESETOFF 3
+#define IRRESET 15
+#define IRRESETOFF 6
 #define IRBIT IRONE + IRZERO
 
 uint8_t txState;
@@ -115,25 +115,28 @@ void ir_tx(void) {
             LATA = (LATA & 0xC0) | txActiveHigh;
         } else {
             txState = TXIDLE;
-            for (uint8_t x = 0; x < 6; x++) {
+            /*for (uint8_t x = 0; x < 6; x++) {
                 if (ir_ports[x].txActive) {
                     if (++(ir_ports[x].txTail) == BUFFERSIZE) {
                         ir_ports[x].txTail = 0;
                     }
                 }
-            }
+            }*/
         }
     } else if (txState == TXIDLE) {
-        if (rgb_updateDue()) {
-            rgb_sendUpdate();
+        /*if (rgb_updateDue()) {
+            
             for (uint8_t x = 0; x < 6; x++) {
                 ir_ports[x].rxReset = true;
             }
-        }
+        }*/
 
         txActiveHigh = 0;
         for (uint8_t x = 0; x < 6; x++) {
             if (ir_ports[x].txHead != ir_ports[x].txTail) {
+                if (++(ir_ports[x].txTail) == BUFFERSIZE) {
+                        ir_ports[x].txTail = 0;
+                    }
                 ir_ports[x].txActive = true;
                 txState = TXRESET;
                 txActiveHigh |= ir_ports[x].txMaskHigh;

@@ -18,6 +18,7 @@ void status_init(void);
 void status_sendUpdate(void);
 void status_tick(void);
 void status_setLed(uint8_t led, bool on);
+void status_toggleLed(uint8_t led);
 void status_animateLed(uint8_t led, uint16_t onCount, uint16_t offCount);
 
 #endif

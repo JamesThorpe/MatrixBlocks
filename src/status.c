@@ -37,6 +37,9 @@ void status_setLed(uint8_t led, bool on) {
     status_leds[led].counter = 0;
     externalUpdate = true;
 }
+void status_toggleLed(uint8_t led) {
+    status_setLed(led, !status_leds[led].on);
+}
 
 void status_tick(void) {
     bool isUpdateNeeded = false;
